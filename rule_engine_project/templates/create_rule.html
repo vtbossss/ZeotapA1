@@ -1,7 +1,15 @@
 {% extends "base.html" %}
-
 {% block content %}
 <h2>Create Rule</h2>
+<p>To create rules, please follow the syntax below:</p>
+<ul>
+    <li>For single conditions, use parentheses: <code>(age > 30)</code></li>
+    <li>For <strong>AND</strong> conditions, use: <code>(age > 30) and (department == 'Sales')</code></li>
+    <li>For <strong>OR</strong> conditions, use: <code>(age < 25) or (department == 'Sales')</code></li>
+    <li>For combined rules, use <strong>and</strong>: <code>((age < 25) and (department == 'Sales')) and ((age > 30) and (department == 'Marketing'))</code></li>
+    <li>For complex rules, you can mix conditions: <code>((age < 25) or (department == 'Sales')) and ((age > 30) or (department == 'Marketing'))</code></li>
+</ul>
+
 <form method="POST">
     {% csrf_token %}
     <div class="form-group">
@@ -11,18 +19,8 @@
     <div class="form-group">
         <label for="rule_string">Rule String</label>
         <input type="text" class="form-control" name="rule_string" required>
-        <small class="form-text text-muted">
-            Example: (age > 30 AND department == 'Sales') <br>
-            Note: Use '==' for equality and '!=' for inequality.
-        </small>
+        <small class="form-text text-muted">Use valid Python expressions for rules, e.g., (age > 30) or (department == 'Sales').</small>
     </div>
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
-
-{% if error %}
-    <div class="alert alert-danger mt-3">{{ error }}</div>
-{% endif %}
-{% if success %}
-    <div class="alert alert-success mt-3">{{ success }}</div>
-{% endif %}
 {% endblock %}
