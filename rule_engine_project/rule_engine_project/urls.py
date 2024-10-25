@@ -1,26 +1,31 @@
 """
-URL configuration for rule_engine_project project.
+URL configuration for the rule_engine_project project.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
+The `urlpatterns` list routes URLs to views. For more information, please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
+
 Examples:
-Function views
+Function views:
     1. Add an import:  from my_app import views
     2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
+
+Class-based views:
     1. Add an import:  from other_app.views import Home
     2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
+
+Including another URLconf:
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path,include
-from rules.views import home_view
 
+# Import necessary modules
+from django.contrib import admin
+from django.urls import path, include  # Include function for URL routing
+from rules.views import home_view  # Import the home view from the rules app
+
+# URL patterns list to route URLs to corresponding views
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path('api/', include('rules.urls')),
-    path('',home_view),
-    
+    path("admin/", admin.site.urls),  # Admin site URL
+    path('api/', include('rules.urls')),  # Include URLs from the rules app
+    path('', home_view),  # Home view for the root URL
 ]

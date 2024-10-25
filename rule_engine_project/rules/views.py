@@ -8,15 +8,24 @@ from .utils import create_rule, evaluate_rule
 from .ast_helper import Node
 
 class CreateRuleView(APIView):
-        
+    """Handles creation of rules."""
+
     def post(self, request):
+        """Creates a new rule based on the provided rule string and name.
+        
+        Args:
+            request: The request object containing the rule data.
+
+        Returns:
+            Response: The response object with the created rule or an error message.
+        """
         rule_string = request.data.get('rule_string')
         rule_name = request.data.get('rule_name')
         
         if not rule_string or not rule_name:
             return Response({"error": "Rule string and rule name are required."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Example of how to ensure proper quoting in the rule string if necessary
+        # Ensure proper quoting in the rule string
         rule_string = rule_string.replace("'", "\"")  # Converts single quotes to double quotes for safety
 
         try:
@@ -28,7 +37,17 @@ class CreateRuleView(APIView):
 
 
 class EvaluateRuleView(APIView):
+    """Handles evaluation of existing rules."""
+
     def post(self, request):
+        """Evaluates a rule based on the provided user data.
+        
+        Args:
+            request: The request object containing the rule ID and user data.
+
+        Returns:
+            Response: The response object with the evaluation result or an error message.
+        """
         rule_id = request.data.get('rule_id')
         user_data = request.data.get('user_data')
         
@@ -38,6 +57,7 @@ class EvaluateRuleView(APIView):
         try:
             rule = Rule.objects.get(id=rule_id)
             ast_structure_dict = rule.ast_structure
+            
             # Reconstruct the AST Node from the dictionary
             ast_structure = reconstruct_node(ast_structure_dict)
             result = evaluate_rule(ast_structure, user_data)
@@ -48,27 +68,49 @@ class EvaluateRuleView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 def reconstruct_node(node_dict):
-    """Reconstructs the Node from a dictionary representation."""
+    """Reconstructs the Node from a dictionary representation.
+    
+    Args:
+        node_dict (dict): The dictionary representation of a node.
+
+    Returns:
+        Node: The reconstructed Node or None for unsupported types.
+    """
     node_type = node_dict.get('node_type')
+    
     if node_type == 'operator':
         left = reconstruct_node(node_dict['left'])
         right = reconstruct_node(node_dict['right'])
         operator = node_dict['value']
         return Node(node_type, left, right, operator)
+    
     elif node_type == 'operand':
         value = node_dict['value']
         return Node(node_type, value=value)
+    
     return None  # Handle unsupported types or errors
 
 def api_view(request):
-    return render(request,'api.html')
+    """Renders the API documentation page."""
+    return render(request, 'api.html')
 
 def home_view(request):
-    return render(request,'index.html')
+    """Renders the home page."""
+    return render(request, 'index.html')
 
 
 class GetAllRulesView(APIView):
+    """Handles retrieval of all rules."""
+
     def get(self, request):
+        """Retrieves all existing rules.
+        
+        Args:
+            request: The request object.
+
+        Returns:
+            Response: The response object with all rules or an error message.
+        """
         rules = Rule.objects.all()  # Get all rules
         serializer = RuleSerializer(rules, many=True)  # Serialize the rules
         return Response(serializer.data, status=status.HTTP_200_OK)

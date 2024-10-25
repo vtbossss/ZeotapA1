@@ -2,16 +2,30 @@ import ast
 import logging
 from .ast_helper import Node
 
-# Initialize logger
+# Initialize the logger for this module
 logger = logging.getLogger(__name__)
 
 def create_rule(rule_string):
-    """Parses the rule string and builds an AST representation."""
+    """Parses the rule string and builds an AST representation.
+    
+    Args:
+        rule_string (str): The rule condition as a string.
+
+    Returns:
+        Node: The root node of the AST representing the rule.
+    """
     parsed_expr = ast.parse(rule_string, mode='eval').body
     return build_ast(parsed_expr)
 
 def build_ast(expr):
-    """Recursively builds an AST from the parsed expression."""
+    """Recursively builds an AST from the parsed expression.
+    
+    Args:
+        expr: The parsed expression.
+
+    Returns:
+        Node: The corresponding AST node.
+    """
     if isinstance(expr, ast.BoolOp):  # Handle AND/OR operations
         left = build_ast(expr.values[0])
         right = build_ast(expr.values[1])
@@ -34,13 +48,22 @@ def build_ast(expr):
         condition = f"{left} {op} {right}"
         return Node('operand', value=condition)
 
-    # Add additional handling for other expression types if needed
+    # Log a warning for unsupported expression types
     logger.warning(f"Unsupported expression type: {type(expr)}")
     return None  # Return None for unsupported types
 
-
 def get_operator_string(op):
-    """Maps AST comparison operators to their string equivalents."""
+    """Maps AST comparison operators to their string equivalents.
+    
+    Args:
+        op: The operator from the AST.
+
+    Returns:
+        str: The string representation of the operator.
+
+    Raises:
+        ValueError: If the operator is unsupported.
+    """
     if isinstance(op, ast.Eq):
         return "=="
     elif isinstance(op, ast.NotEq):
@@ -57,7 +80,15 @@ def get_operator_string(op):
         raise ValueError("Unsupported comparison operator")
 
 def evaluate_rule(ast_node, data):
-    """Evaluates the AST node based on user data."""
+    """Evaluates the AST node based on user data.
+    
+    Args:
+        ast_node (Node): The AST node to evaluate.
+        data (dict): The user data for evaluation.
+
+    Returns:
+        bool: The result of the evaluation.
+    """
     if ast_node.node_type == 'operator':
         left_eval = evaluate_rule(ast_node.left, data)
         right_eval = evaluate_rule(ast_node.right, data)
@@ -78,9 +109,16 @@ def evaluate_rule(ast_node, data):
             print(f"Error evaluating condition '{condition}': {e}")
             return False
 
-
 def safe_eval(condition, data):
-    """Safely evaluates a condition using provided data."""
+    """Safely evaluates a condition using provided data.
+    
+    Args:
+        condition (str): The condition to evaluate.
+        data (dict): The user data for evaluation.
+
+    Returns:
+        bool: The result of the evaluation, or False on failure.
+    """
     try:
         # Create a local environment with the data
         local_env = {key: value for key, value in data.items() if key.isidentifier()}
@@ -90,7 +128,14 @@ def safe_eval(condition, data):
         return False
 
 def combine_rules(rules):
-    """Combines multiple AST nodes into a single AST."""
+    """Combines multiple AST nodes into a single AST.
+    
+    Args:
+        rules (list): List of AST nodes to combine.
+
+    Returns:
+        Node: The combined AST node, or None if no rules are provided.
+    """
     if not rules:
         return None
 
