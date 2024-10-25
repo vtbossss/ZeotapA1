@@ -8,8 +8,6 @@ from .utils import create_rule, evaluate_rule
 from .ast_helper import Node
 
 class CreateRuleView(APIView):
-    def get(self, request):
-        return render(request, 'create_rule.html', {})
         
     def post(self, request):
         rule_string = request.data.get('rule_string')
@@ -62,3 +60,5 @@ def reconstruct_node(node_dict):
         return Node(node_type, value=value)
     return None  # Handle unsupported types or errors
 
+def api_view(request):
+    return render(request,'api.html')

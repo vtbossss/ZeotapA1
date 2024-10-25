@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rule Engine API Documentation</title>
+</head>
+<body>
+    <h1>Rule Engine API Documentation</h1>
+    <p>This API allows users to define dynamic rules for evaluating conditions on user data, such as eligibility or access checks, based on criteria like age, department, salary, and experience.</p>
+    <p>Supported operations:</p>
+    <ul>
+        <li>Creating rules with simple or complex conditions.</li>
+        <li>Evaluating user data against defined rules to determine if conditions are met.</li>
+    </ul>
+    <hr>
+
+    <h2>Create Rule</h2>
+    <p><b>Description:</b> Allows clients to create rules using a <code>rule_string</code>. Supports simple comparisons (e.g., <code>age > 30</code>) and complex expressions with <code>AND</code>/<code>OR</code> operators.</p>
+    <p><b>Endpoint:</b> /api/create-rule/</p>
+    <p><b>Method:</b> POST</p>
+    <p><b>Content-Type:</b> application/json</p>
+
+    <h3>Request Format</h3>
+    <pre><code>
+{
+    "rule_name": "Rule Name",
+    "rule_string": "(condition1) AND (condition2)"
+}
+    </code></pre>
+
+    <h3>Response Format</h3>
+    <pre><code>
+{
+    "id": integer,
+    "rule_name": "Rule Name",
+    "ast_structure": {...},
+    "created_at": "timestamp",
+    "modified_at": "timestamp"
+}
+    </code></pre>
+
+    <h4>Example: Simple Rule</h4>
+    <p><b>Request:</b></p>
+    <pre><code>
+{
+    "rule_name": "Age and Salary Rule",
+    "rule_string": "(age > 30) and (salary > 50000)"
+}
+    </code></pre>
+
+    <p><b>Response:</b></p>
+    <pre><code>
+{
+    "id": 1,
+    "rule_name": "Age and Salary Rule",
+    "ast_structure": {
+        "node_type": "operator",
+        "left": {
+            "node_type": "operand",
+            "value": "age > 30"
+        },
+        "right": {
+            "node_type": "operand",
+            "value": "salary > 50000"
+        },
+        "value": "AND"
+    },
+    "created_at": "2024-10-25T14:00:00Z",
+    "modified_at": "2024-10-25T14:00:00Z"
+}
+    </code></pre>
+
+    <h4>Example: Combined Rule</h4>
+    <p><b>Request:</b></p>
+    <pre><code>
+{
+    "rule_name": "Age and Department Rule",
+    "rule_string": "((age > 30 and department == 'Sales') or (age < 25 and department == 'Marketing')) and (salary > 50000 or experience > 5)"
+}
+    </code></pre>
+
+    <p><b>Response:</b></p>
+    <pre><code>
+{
+    "id": 2,
+    "rule_name": "Age and Department Rule",
+    "ast_structure": {
+        "node_type": "operator",
+        "left": {...},
+        "right": {...},
+        "value": "AND"
+    },
+    "created_at": "2024-10-25T14:10:00Z",
+    "modified_at": "2024-10-25T14:10:00Z"
+}
+    </code></pre>
+
+    <hr>
+
+    <h2>Evaluate Rule</h2>
+    <p><b>Description:</b> Evaluates provided <code>user_data</code> against a specified rule by <code>rule_id</code>. Returns a boolean indicating whether the data satisfies the rule.</p>
+    <p><b>Endpoint:</b> /api/evaluate-rule/</p>
+    <p><b>Method:</b> POST</p>
+    <p><b>Content-Type:</b> application/json</p>
+
+    <h3>Request Format</h3>
+    <pre><code>
+{
+    "rule_id": integer,
+    "user_data": {
+        "attribute1": value1,
+        "attribute2": value2,
+        ...
+    }
+}
+    </code></pre>
+
+    <h3>Response Format</h3>
+    <pre><code>
+{
+    "result": boolean
+}
+    </code></pre>
+
+    <h4>Example: Simple Rule Evaluation</h4>
+    <p><b>Request:</b></p>
+    <pre><code>
+{
+    "rule_id": 1,
+    "user_data": {
+        "age": 35,
+        "salary": 60000
+    }
+}
+    </code></pre>
+
+    <p><b>Response:</b></p>
+    <pre><code>
+{
+    "result": true
+}
+    </code></pre>
+
+    <h4>Example: Combined Rule Evaluation</h4>
+    <p><b>Request:</b></p>
+    <pre><code>
+{
+    "rule_id": 2,
+    "user_data": {
+        "age": 32,
+        "department": "Sales",
+        "salary": 55000,
+        "experience": 3
+    }
+}
+    </code></pre>
+
+    <p><b>Response:</b></p>
+    <pre><code>
+{
+    "result": true
+}
+    </code></pre>
+
+    <hr>
+
+    <h2>Error Handling</h2>
+    <p>If an error occurs, the API returns an error message and a status code.</p>
+
+    <h3>Common Errors</h3>
+    <pre><code>
+400 Bad Request
+{
+    "detail": "Invalid JSON format or missing parameters."
+}
+
+404 Not Found
+{
+    "detail": "Rule with specified ID not found."
+}
+    </code></pre>
+
+    <hr>
+
+    <h2>Notes</h2>
+    <ul>
+        <li>The rule string format must follow JavaScript or Python-like syntax, with <code>==</code>, <code>&gt;</code>, <code>&lt;</code>, <code>AND</code>, and <code>OR</code>.</li>
+        <li>Ensure that <code>user_data</code> keys match exactly with those used in <code>rule_string</code>.</li>
+        <li>The <code>rule_id</code> should match an existing rule for the evaluation to work.</li>
+    </ul>
+</body>
+</html>

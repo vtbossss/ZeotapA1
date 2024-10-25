@@ -19,9 +19,16 @@ def build_ast(expr):
         return Node('operator', left, right, operator)
 
     elif isinstance(expr, ast.Compare):  # Handle comparisons
-        left = expr.left.id
+        left = expr.left.id  # Assuming left is always an identifier
         op = get_operator_string(expr.ops[0])
-        right = expr.comparators[0].n if isinstance(expr.comparators[0], ast.Constant) else expr.comparators[0].s
+        
+        # Handle right-side comparison values properly
+        if isinstance(expr.comparators[0], ast.Constant):
+            right = expr.comparators[0].value  # Use .value for both numbers and strings
+            if isinstance(right, str):
+                right = f"'{right}'"  # Wrap strings in single quotes
+        else:
+            right = expr.comparators[0].id  # In case of an identifier
         
         # Construct the comparison expression
         condition = f"{left} {op} {right}"
@@ -30,6 +37,7 @@ def build_ast(expr):
     # Add additional handling for other expression types if needed
     logger.warning(f"Unsupported expression type: {type(expr)}")
     return None  # Return None for unsupported types
+
 
 def get_operator_string(op):
     """Maps AST comparison operators to their string equivalents."""
