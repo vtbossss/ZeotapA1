@@ -63,6 +63,9 @@ def reconstruct_node(node_dict):
 def api_view(request):
     return render(request,'api.html')
 
+def home_view(request):
+    return render(request,'index.html')
+
 
 class GetAllRulesView(APIView):
     def get(self, request):

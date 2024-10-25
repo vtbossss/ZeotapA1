@@ -48,12 +48,12 @@
         <ul>
             <li>Creating rules with simple or complex conditions.</li>
             <li>Evaluating user data against defined rules to determine if conditions are met.</li>
-            <li>Retrieving all defined rules.</li> <!-- Added this line -->
+            <li>Retrieving all defined rules.</li>
         </ul>
         <hr>
 
         <h2>Create Rule</h2>
-        <p><strong>Description:</strong> Allows clients to create rules using a <code>rule_string</code>. Supports simple comparisons (e.g., <code>age > 30</code>) and complex expressions with <code>AND</code>/<code>OR</code> operators.</p>
+        <p><strong>Description:</strong> Allows clients to create rules using a <code>rule_string</code>. Supports simple comparisons (e.g., <code>age > 30</code>) and complex expressions with <code>and</code>/<code>or</code> operators.</p>
         <p><strong>Endpoint:</strong> <a href="/api/create-rule/" class="endpoint-link">/api/create-rule/</a></p>
         <p><strong>Method:</strong> POST</p>
         <p><strong>Content-Type:</strong> application/json</p>
@@ -61,7 +61,7 @@
         <h3>Request Format</h3>
         <pre><code>{
     "rule_name": "Rule Name",
-    "rule_string": "(condition1) AND (condition2)"
+    "rule_string": "(condition1) and (condition2)"
 }</code></pre>
 
         <h3>Response Format</h3>
@@ -97,7 +97,7 @@
             "node_type": "operand",
             "value": "salary > 50000"
         },
-        "value": "AND"
+        "value": "and"
     },
     "created_at": "2024-10-25T14:00:00Z",
     "modified_at": "2024-10-25T14:00:00Z"
@@ -120,7 +120,7 @@
         "node_type": "operator",
         "left": {...},
         "right": {...},
-        "value": "AND"
+        "value": "and"
     },
     "created_at": "2024-10-25T14:10:00Z",
     "modified_at": "2024-10-25T14:10:00Z"
@@ -186,7 +186,7 @@
 }</code></pre>
         </div>
 
-        <h2>Get All Rules</h2> <!-- New section -->
+        <h2>Get All Rules</h2>
         <p><strong>Description:</strong> Retrieves all defined rules from the system.</p>
         <p><strong>Endpoint:</strong> <a href="/api/get-all-rules/" class="endpoint-link">/api/get-all-rules/</a></p>
         <p><strong>Method:</strong> GET</p>
@@ -228,11 +228,10 @@
     }
 ]</code></pre>
         </div>
-
     </div>
-    <!-- Bootstrap JS (Optional) -->
+    <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
