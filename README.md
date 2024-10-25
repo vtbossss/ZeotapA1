@@ -29,6 +29,46 @@ The objective of this project is to evaluate user eligibility based on specific 
 - **API Layer:** Django REST API to handle rule creation, combining, and evaluation.
 - **Data Layer:** SQLite database for storing rules and application metadata.
 
+## Project Structure
+
+```plaintext
+ZeotapA1/
+├── rule_engine_project/
+│   ├── rule_engine_project/       # Django project directory
+│   │   ├── __pycache__/           # Compiled bytecode files
+│   │   ├── __init__.py
+│   │   ├── asgi.py                # ASGI configuration for async support
+│   │   ├── settings.py            # Django project settings
+│   │   ├── urls.py                # URL configuration
+│   │   └── wsgi.py                # WSGI configuration for web servers
+│   ├── rules/                     # Application for rule engine logic
+│   │   ├── __pycache__/           # Compiled bytecode files
+│   │   ├── migrations/            # Database migration files
+│   │   │   ├── __pycache__/
+│   │   │   ├── __init__.py
+│   │   │   └── 0001_initial.py    # Initial migration file
+│   │   ├── __init__.py
+│   │   ├── admin.py               # Admin configuration for rules
+│   │   ├── apps.py                # App configuration
+│   │   ├── ast_helper.py          # Helper functions for AST manipulations
+│   │   ├── models.py              # Database models for rules
+│   │   ├── serializers.py         # Serializers for API data formatting
+│   │   ├── tests.py               # Test suite for rules
+│   │   ├── urls.py                # URL patterns for rules app
+│   │   ├── utils.py               # Utility functions
+│   │   └── views.py               # Views handling rule-related requests
+│   ├── templates/                 # HTML templates for UI
+│   │   ├── api.html               # API documentation page
+│   │   ├── base.html              # Base template for the application
+│   │   └── create_rule.html       # Rule creation page
+│   ├── db.sqlite3                 # SQLite database file
+│   ├── docker-compose.yml         # Docker Compose configuration file
+│   ├── Dockerfile                 # Dockerfile to containerize the application
+│   ├── manage.py                  # Django management script
+│   └── requirements.txt           # Python dependencies for the project
+```
+
+
 ## Design Choices
 
 - **Abstract Syntax Tree (AST):** The project uses ASTs to handle the conditional rules, making them dynamic and modifiable.
@@ -159,41 +199,21 @@ All application dependencies are listed in `requirements.txt`.
   - URL: `http://localhost:8000/api/get-all-rules/`
   - Method: `GET`
   - No request body needed.
+ 
+## Screenshots
+<img width="1680" alt="Screenshot 2024-10-26 at 03 25 17" src="https://github.com/user-attachments/assets/86560a30-0455-4bef-b6bb-36eca45c14eb"><br><br>
 
-## Project Structure
+<img width="1680" alt="Screenshot 2024-10-26 at 03 25 32" src="https://github.com/user-attachments/assets/2c8f2ef1-08d6-40c8-b4d7-d16eefc051d3"><br><br>
 
-```plaintext
-ZeotapA1/
-├── rule_engine_project/
-│   ├── rule_engine_project/       # Django project directory
-│   │   ├── __pycache__/           # Compiled bytecode files
-│   │   ├── __init__.py
-│   │   ├── asgi.py                # ASGI configuration for async support
-│   │   ├── settings.py            # Django project settings
-│   │   ├── urls.py                # URL configuration
-│   │   └── wsgi.py                # WSGI configuration for web servers
-│   ├── rules/                     # Application for rule engine logic
-│   │   ├── __pycache__/           # Compiled bytecode files
-│   │   ├── migrations/            # Database migration files
-│   │   │   ├── __pycache__/
-│   │   │   ├── __init__.py
-│   │   │   └── 0001_initial.py    # Initial migration file
-│   │   ├── __init__.py
-│   │   ├── admin.py               # Admin configuration for rules
-│   │   ├── apps.py                # App configuration
-│   │   ├── ast_helper.py          # Helper functions for AST manipulations
-│   │   ├── models.py              # Database models for rules
-│   │   ├── serializers.py         # Serializers for API data formatting
-│   │   ├── tests.py               # Test suite for rules
-│   │   ├── urls.py                # URL patterns for rules app
-│   │   ├── utils.py               # Utility functions
-│   │   └── views.py               # Views handling rule-related requests
-│   ├── templates/                 # HTML templates for UI
-│   │   ├── api.html               # API documentation page
-│   │   ├── base.html              # Base template for the application
-│   │   └── create_rule.html       # Rule creation page
-│   ├── db.sqlite3                 # SQLite database file
-│   ├── docker-compose.yml         # Docker Compose configuration file
-│   ├── Dockerfile                 # Dockerfile to containerize the application
-│   ├── manage.py                  # Django management script
-│   └── requirements.txt           # Python dependencies for the project
+<img width="1680" alt="Screenshot 2024-10-26 at 03 26 05" src="https://github.com/user-attachments/assets/445549d7-876a-4b6c-a584-f3a93b0b453a"><br><br>
+
+<img width="1680" alt="Screenshot 2024-10-26 at 03 26 19" src="https://github.com/user-attachments/assets/ec6d91fe-59a2-4cee-8ecf-43fd6c181c2a">
+
+
+
+
+
+
+
+
+
