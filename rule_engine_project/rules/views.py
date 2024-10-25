@@ -62,3 +62,10 @@ def reconstruct_node(node_dict):
 
 def api_view(request):
     return render(request,'api.html')
+
+
+class GetAllRulesView(APIView):
+    def get(self, request):
+        rules = Rule.objects.all()  # Get all rules
+        serializer = RuleSerializer(rules, many=True)  # Serialize the rules
+        return Response(serializer.data, status=status.HTTP_200_OK)

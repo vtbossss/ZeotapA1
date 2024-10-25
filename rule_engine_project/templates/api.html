@@ -2,55 +2,89 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rule Engine API Documentation</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        h1, h2, h3, h4 {
+            color: #343a40;
+        }
+        pre {
+            background-color: #e9ecef;
+            border-left: 3px solid #007bff;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        ul {
+            list-style-type: none;
+        }
+        ul li::before {
+            content: "✔️"; /* Adding a checkmark before list items */
+            color: #28a745; /* Green color for checkmark */
+            margin-right: 5px;
+        }
+        .response {
+            background-color: #e2f0d9; /* Light green background for response sections */
+            border-left: 3px solid #28a745; /* Green border for response */
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .endpoint-link {
+            color: #007bff;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1>Rule Engine API Documentation</h1>
-    <p>This API allows users to define dynamic rules for evaluating conditions on user data, such as eligibility or access checks, based on criteria like age, department, salary, and experience.</p>
-    <p>Supported operations:</p>
-    <ul>
-        <li>Creating rules with simple or complex conditions.</li>
-        <li>Evaluating user data against defined rules to determine if conditions are met.</li>
-    </ul>
-    <hr>
+    <div class="container mt-5">
+        <h1 class="text-center">Rule Engine API Documentation</h1>
+        <p>This API allows users to define dynamic rules for evaluating conditions on user data, such as eligibility or access checks, based on criteria like age, department, salary, and experience.</p>
+        <p><strong>Supported operations:</strong></p>
+        <ul>
+            <li>Creating rules with simple or complex conditions.</li>
+            <li>Evaluating user data against defined rules to determine if conditions are met.</li>
+            <li>Retrieving all defined rules.</li> <!-- Added this line -->
+        </ul>
+        <hr>
 
-    <h2>Create Rule</h2>
-    <p><b>Description:</b> Allows clients to create rules using a <code>rule_string</code>. Supports simple comparisons (e.g., <code>age > 30</code>) and complex expressions with <code>AND</code>/<code>OR</code> operators.</p>
-    <p><b>Endpoint:</b> /api/create-rule/</p>
-    <p><b>Method:</b> POST</p>
-    <p><b>Content-Type:</b> application/json</p>
+        <h2>Create Rule</h2>
+        <p><strong>Description:</strong> Allows clients to create rules using a <code>rule_string</code>. Supports simple comparisons (e.g., <code>age > 30</code>) and complex expressions with <code>AND</code>/<code>OR</code> operators.</p>
+        <p><strong>Endpoint:</strong> <a href="/api/create-rule/" class="endpoint-link">/api/create-rule/</a></p>
+        <p><strong>Method:</strong> POST</p>
+        <p><strong>Content-Type:</strong> application/json</p>
 
-    <h3>Request Format</h3>
-    <pre><code>
-{
+        <h3>Request Format</h3>
+        <pre><code>{
     "rule_name": "Rule Name",
     "rule_string": "(condition1) AND (condition2)"
-}
-    </code></pre>
+}</code></pre>
 
-    <h3>Response Format</h3>
-    <pre><code>
-{
+        <h3>Response Format</h3>
+        <div class="response">
+            <pre><code>{
     "id": integer,
     "rule_name": "Rule Name",
     "ast_structure": {...},
     "created_at": "timestamp",
     "modified_at": "timestamp"
-}
-    </code></pre>
+}</code></pre>
+        </div>
 
-    <h4>Example: Simple Rule</h4>
-    <p><b>Request:</b></p>
-    <pre><code>
-{
+        <h4>Example: Simple Rule</h4>
+        <p><strong>Request:</strong></p>
+        <pre><code>{
     "rule_name": "Age and Salary Rule",
     "rule_string": "(age > 30) and (salary > 50000)"
-}
-    </code></pre>
+}</code></pre>
 
-    <p><b>Response:</b></p>
-    <pre><code>
-{
+        <p><strong>Response:</strong></p>
+        <div class="response">
+            <pre><code>{
     "id": 1,
     "rule_name": "Age and Salary Rule",
     "ast_structure": {
@@ -67,21 +101,19 @@
     },
     "created_at": "2024-10-25T14:00:00Z",
     "modified_at": "2024-10-25T14:00:00Z"
-}
-    </code></pre>
+}</code></pre>
+        </div>
 
-    <h4>Example: Combined Rule</h4>
-    <p><b>Request:</b></p>
-    <pre><code>
-{
+        <h4>Example: Combined Rule</h4>
+        <p><strong>Request:</strong></p>
+        <pre><code>{
     "rule_name": "Age and Department Rule",
     "rule_string": "((age > 30 and department == 'Sales') or (age < 25 and department == 'Marketing')) and (salary > 50000 or experience > 5)"
-}
-    </code></pre>
+}</code></pre>
 
-    <p><b>Response:</b></p>
-    <pre><code>
-{
+        <p><strong>Response:</strong></p>
+        <div class="response">
+            <pre><code>{
     "id": 2,
     "rule_name": "Age and Department Rule",
     "ast_structure": {
@@ -92,59 +124,52 @@
     },
     "created_at": "2024-10-25T14:10:00Z",
     "modified_at": "2024-10-25T14:10:00Z"
-}
-    </code></pre>
+}</code></pre>
+        </div>
 
-    <hr>
+        <h2>Evaluate Rule</h2>
+        <p><strong>Description:</strong> Evaluates provided <code>user_data</code> against a specified rule by <code>rule_id</code>. Returns a boolean indicating whether the data satisfies the rule.</p>
+        <p><strong>Endpoint:</strong> <a href="/api/evaluate-rule/" class="endpoint-link">/api/evaluate-rule/</a></p>
+        <p><strong>Method:</strong> POST</p>
+        <p><strong>Content-Type:</strong> application/json</p>
 
-    <h2>Evaluate Rule</h2>
-    <p><b>Description:</b> Evaluates provided <code>user_data</code> against a specified rule by <code>rule_id</code>. Returns a boolean indicating whether the data satisfies the rule.</p>
-    <p><b>Endpoint:</b> /api/evaluate-rule/</p>
-    <p><b>Method:</b> POST</p>
-    <p><b>Content-Type:</b> application/json</p>
-
-    <h3>Request Format</h3>
-    <pre><code>
-{
+        <h3>Request Format</h3>
+        <pre><code>{
     "rule_id": integer,
     "user_data": {
         "attribute1": value1,
         "attribute2": value2,
         ...
     }
-}
-    </code></pre>
+}</code></pre>
 
-    <h3>Response Format</h3>
-    <pre><code>
-{
+        <h3>Response Format</h3>
+        <div class="response">
+            <pre><code>{
     "result": boolean
-}
-    </code></pre>
+}</code></pre>
+        </div>
 
-    <h4>Example: Simple Rule Evaluation</h4>
-    <p><b>Request:</b></p>
-    <pre><code>
-{
+        <h4>Example: Simple Rule Evaluation</h4>
+        <p><strong>Request:</strong></p>
+        <pre><code>{
     "rule_id": 1,
     "user_data": {
         "age": 35,
         "salary": 60000
     }
-}
-    </code></pre>
+}</code></pre>
 
-    <p><b>Response:</b></p>
-    <pre><code>
-{
+        <p><strong>Response:</strong></p>
+        <div class="response">
+            <pre><code>{
     "result": true
-}
-    </code></pre>
+}</code></pre>
+        </div>
 
-    <h4>Example: Combined Rule Evaluation</h4>
-    <p><b>Request:</b></p>
-    <pre><code>
-{
+        <h4>Example: Combined Rule Evaluation</h4>
+        <p><strong>Request:</strong></p>
+        <pre><code>{
     "rule_id": 2,
     "user_data": {
         "age": 32,
@@ -152,41 +177,62 @@
         "salary": 55000,
         "experience": 3
     }
-}
-    </code></pre>
+}</code></pre>
 
-    <p><b>Response:</b></p>
-    <pre><code>
-{
+        <p><strong>Response:</strong></p>
+        <div class="response">
+            <pre><code>{
     "result": true
-}
-    </code></pre>
+}</code></pre>
+        </div>
 
-    <hr>
+        <h2>Get All Rules</h2> <!-- New section -->
+        <p><strong>Description:</strong> Retrieves all defined rules from the system.</p>
+        <p><strong>Endpoint:</strong> <a href="/api/get-all-rules/" class="endpoint-link">/api/get-all-rules/</a></p>
+        <p><strong>Method:</strong> GET</p>
 
-    <h2>Error Handling</h2>
-    <p>If an error occurs, the API returns an error message and a status code.</p>
+        <h3>Response Format</h3>
+        <div class="response">
+            <pre><code>[
+    {
+        "id": integer,
+        "rule_name": "Rule Name",
+        "rule_string": "condition",
+        "ast_structure": {...},
+        "created_at": "timestamp",
+        "modified_at": "timestamp"
+    },
+    ...
+]</code></pre>
+        </div>
 
-    <h3>Common Errors</h3>
-    <pre><code>
-400 Bad Request
-{
-    "detail": "Invalid JSON format or missing parameters."
-}
+        <h4>Example: Get All Rules</h4>
+        <p><strong>Response:</strong></p>
+        <div class="response">
+            <pre><code>[
+    {
+        "id": 1,
+        "rule_name": "Age and Salary Rule",
+        "rule_string": "(age > 30) and (salary > 50000)",
+        "ast_structure": {...},
+        "created_at": "2024-10-25T14:00:00Z",
+        "modified_at": "2024-10-25T14:00:00Z"
+    },
+    {
+        "id": 2,
+        "rule_name": "Age and Department Rule",
+        "rule_string": "((age > 30 and department == 'Sales') or (age < 25 and department == 'Marketing')) and (salary > 50000 or experience > 5)",
+        "ast_structure": {...},
+        "created_at": "2024-10-25T14:10:00Z",
+        "modified_at": "2024-10-25T14:10:00Z"
+    }
+]</code></pre>
+        </div>
 
-404 Not Found
-{
-    "detail": "Rule with specified ID not found."
-}
-    </code></pre>
-
-    <hr>
-
-    <h2>Notes</h2>
-    <ul>
-        <li>The rule string format must follow JavaScript or Python-like syntax, with <code>==</code>, <code>&gt;</code>, <code>&lt;</code>, <code>AND</code>, and <code>OR</code>.</li>
-        <li>Ensure that <code>user_data</code> keys match exactly with those used in <code>rule_string</code>.</li>
-        <li>The <code>rule_id</code> should match an existing rule for the evaluation to work.</li>
-    </ul>
+    </div>
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
