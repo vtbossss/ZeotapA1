@@ -23,9 +23,9 @@ The objective of this project is to evaluate user eligibility based on specific 
 
 ## Application Architecture
 
-This project follows a 3-tier architecture:
 
-- **UI Layer:** A simple HTML interface to create, view, and evaluate rules.
+- **UI Layer:** The UI layer of this application is powered by the Django REST Framework's built-in HTML interface, which provides a straightforward way for users to interact with the API for testing and development purposes.
+- **Documentation:** The documentation is available at /api/ endpoint.
 - **API Layer:** Django REST API to handle rule creation, combining, and evaluation.
 - **Data Layer:** SQLite database for storing rules and application metadata.
 
